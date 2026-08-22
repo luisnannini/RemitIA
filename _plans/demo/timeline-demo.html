@@ -37,9 +37,9 @@
 	.clip:hover { transform: translateY(-3px); }
 	.clip .n { font-weight: 700; font-size: 12px; }
 	.clip .d { opacity: 0.75; }
-	.stock { background: #123c33; border: 1px solid #1e6b58; color: #7fe0c3; }
+	.stock { background: #452c06; border: 1px solid #a8700f; color: #ffc95e; }
 	.placa { background: #2b2350; border: 1px solid #4c3f8f; color: #b9a8f5; }
-	.real  { background: #0b2c47; border: 1px solid #1c5480; color: #7cc7f2; }
+	.real  { background: #0a3154; border: 1px solid #2d84cf; color: #93d4ff; }
 
 	.ruler { display: flex; margin-top: 6px; font-size: 11px; color: #45607f; }
 	.ruler span { flex: 1; border-left: 1px solid #14283f; padding-left: 4px; }
@@ -55,8 +55,8 @@
 	td { padding: 7px 10px; border-bottom: 1px solid #0c1a2e; color: #9fb3cc; }
 	td.t { font-family: Consolas, monospace; color: #dbe7f5; white-space: nowrap; }
 	td.f { font-family: Consolas, monospace; font-size: 12px; }
-	tr.hoy td.estado { color: #7fe0c3; font-weight: 600; }
-	tr.man td.estado { color: #7cc7f2; }
+	tr.hoy td.estado { color: #ffc95e; font-weight: 600; }
+	tr.man td.estado { color: #93d4ff; }
 	td .tag { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; }
 </style>
 </head>
@@ -102,29 +102,29 @@
 	</div>
 
 	<div class="legend">
-		<span><span class="dot" style="background:#1e6b58"></span>Stock (se baja HOY)</span>
+		<span><span class="dot" style="background:#c98a16"></span>Stock (se baja HOY)</span>
 		<span><span class="dot" style="background:#4c3f8f"></span>Placa (se graba HOY)</span>
-		<span><span class="dot" style="background:#1c5480"></span>Real (se filma MAÑANA)</span>
+		<span><span class="dot" style="background:#2d84cf"></span>Real (se filma MAÑANA)</span>
 	</div>
 
 	<table>
 		<thead><tr><th>#</th><th>Tiempo</th><th>Archivo</th><th>Qué se ve</th><th>Audio</th><th>Estado</th></tr></thead>
 		<tbody>
-			<tr class="hoy"><td>01</td><td class="t">0:00–0:08</td><td class="f">01-stock-camion.mp4</td><td><span class="tag" style="background:#1e6b58"></span>Camión de reparto llega al local</td><td>VO-01 + música sube</td><td class="estado">HOY</td></tr>
-			<tr class="hoy"><td>02</td><td class="t">0:08–0:16</td><td class="f">02-stock-descarga.mp4</td><td><span class="tag" style="background:#1e6b58"></span>Descarga de cajas al carrito</td><td>VO-02</td><td class="estado">HOY</td></tr>
-			<tr class="hoy"><td>03</td><td class="t">0:16–0:26</td><td class="f">03-stock-conteo.mp4</td><td><span class="tag" style="background:#1e6b58"></span>Empleado cuenta cajas con papel</td><td>VO-03</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>01</td><td class="t">0:00–0:08</td><td class="f">01-stock-camion.mp4</td><td><span class="tag" style="background:#c98a16"></span>Camión de reparto llega al local</td><td>VO-01 + música sube</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>02</td><td class="t">0:08–0:16</td><td class="f">02-stock-descarga.mp4</td><td><span class="tag" style="background:#c98a16"></span>Descarga de cajas al carrito</td><td>VO-02</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>03</td><td class="t">0:16–0:26</td><td class="f">03-stock-conteo.mp4</td><td><span class="tag" style="background:#c98a16"></span>Empleado cuenta cajas con papel</td><td>VO-03</td><td class="estado">HOY</td></tr>
 			<tr class="hoy"><td>04</td><td class="t">0:26–0:32</td><td class="f">04-placa-titulo.mp4</td><td><span class="tag" style="background:#4c3f8f"></span>Logo + tagline</td><td>Golpe musical</td><td class="estado">HOY</td></tr>
-			<tr class="man"><td>05</td><td class="t">0:32–0:42</td><td class="f">05-t1-sin-internet.mp4</td><td><span class="tag" style="background:#1c5480"></span>Google sin internet + app READY</td><td>VO-04</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>06</td><td class="t">0:42–0:56</td><td class="f">06-t2-foto-remito.mp4</td><td><span class="tag" style="background:#1c5480"></span>Manos + remito + foto desde la app</td><td>VO-05</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>07</td><td class="t">0:56–1:06</td><td class="f">07-t3-procesando.mp4</td><td><span class="tag" style="background:#1c5480"></span>Pantalla Procesando</td><td>VO-06</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>08</td><td class="t">1:06–1:16</td><td class="f">08-t4-foto-mala.mp4</td><td><span class="tag" style="background:#1c5480"></span>Foto movida → rechazo</td><td>VO-07</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>09</td><td class="t">1:16–1:34</td><td class="f">09-t5-revision.mp4</td><td><span class="tag" style="background:#1c5480"></span>Pregunta del Bilbao → "cromado"</td><td>VO-08</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>10</td><td class="t">1:34–1:50</td><td class="f">10-t6-alta-sku.mp4</td><td><span class="tag" style="background:#1c5480"></span>Alta de la ducha ACC-DUCH-01</td><td>VO-09</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>11</td><td class="t">1:50–2:12</td><td class="f">11-t7-escaneo.mp4</td><td><span class="tag" style="background:#1c5480"></span>Escaneo de las 3 cajas iguales</td><td>VO-10</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>12</td><td class="t">2:12–2:24</td><td class="f">12-t8-confirmar.mp4</td><td><span class="tag" style="background:#1c5480"></span>Modal "¿Ya contaste todo?"</td><td>VO-11</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>13</td><td class="t">2:24–2:44</td><td class="f">13-t9-reclamo.mp4</td><td><span class="tag" style="background:#1c5480"></span>Reclamo con tabla de hechos</td><td>VO-12</td><td class="estado">MAÑANA</td></tr>
-			<tr class="man"><td>14</td><td class="t">2:44–2:52</td><td class="f">14-t10-resumen.mp4</td><td><span class="tag" style="background:#1c5480"></span>Resumen + sello QVAC</td><td>VO-13</td><td class="estado">MAÑANA</td></tr>
-			<tr class="hoy"><td>15</td><td class="t">2:52–2:57</td><td class="f">15-stock-camion-se-va.mp4</td><td><span class="tag" style="background:#1e6b58"></span>El camión se va</td><td>VO-14</td><td class="estado">HOY</td></tr>
+			<tr class="man"><td>05</td><td class="t">0:32–0:42</td><td class="f">05-t1-sin-internet.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Google sin internet + app READY</td><td>VO-04</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>06</td><td class="t">0:42–0:56</td><td class="f">06-t2-foto-remito.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Manos + remito + foto desde la app</td><td>VO-05</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>07</td><td class="t">0:56–1:06</td><td class="f">07-t3-procesando.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Pantalla Procesando</td><td>VO-06</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>08</td><td class="t">1:06–1:16</td><td class="f">08-t4-foto-mala.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Foto movida → rechazo</td><td>VO-07</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>09</td><td class="t">1:16–1:34</td><td class="f">09-t5-revision.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Pregunta del Bilbao → "cromado"</td><td>VO-08</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>10</td><td class="t">1:34–1:50</td><td class="f">10-t6-alta-sku.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Alta de la ducha ACC-DUCH-01</td><td>VO-09</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>11</td><td class="t">1:50–2:12</td><td class="f">11-t7-escaneo.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Escaneo de las 3 cajas iguales</td><td>VO-10</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>12</td><td class="t">2:12–2:24</td><td class="f">12-t8-confirmar.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Modal "¿Ya contaste todo?"</td><td>VO-11</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>13</td><td class="t">2:24–2:44</td><td class="f">13-t9-reclamo.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Reclamo con tabla de hechos</td><td>VO-12</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>14</td><td class="t">2:44–2:52</td><td class="f">14-t10-resumen.mp4</td><td><span class="tag" style="background:#2d84cf"></span>Resumen + sello QVAC</td><td>VO-13</td><td class="estado">MAÑANA</td></tr>
+			<tr class="hoy"><td>15</td><td class="t">2:52–2:57</td><td class="f">15-stock-camion-se-va.mp4</td><td><span class="tag" style="background:#c98a16"></span>El camión se va</td><td>VO-14</td><td class="estado">HOY</td></tr>
 			<tr class="hoy"><td>16</td><td class="t">2:57–3:00</td><td class="f">16-placa-final.mp4</td><td><span class="tag" style="background:#4c3f8f"></span>Equipo · track · repo</td><td>Música cierra</td><td class="estado">HOY</td></tr>
 		</tbody>
 	</table>
