@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>RemitIA — mapa de los 3 minutos</title>
+<style>
+	* { margin: 0; box-sizing: border-box; }
+	body {
+		background: #060d1a; color: #dbe7f5;
+		font-family: "Segoe UI", system-ui, Arial, sans-serif;
+		padding: 32px 40px 60px;
+	}
+	h1 { font-size: 26px; font-weight: 700; }
+	h1 b { color: #38bdf8; }
+	.stats { display: flex; gap: 10px; margin: 14px 0 30px; flex-wrap: wrap; }
+	.stat {
+		border: 1px solid #1e3a5c; border-radius: 99px; padding: 6px 14px;
+		font-size: 13px; color: #9fb3cc;
+	}
+	.stat b { color: #dbe7f5; }
+
+	.acts { display: flex; gap: 3px; margin-bottom: 6px; }
+	.act {
+		font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;
+		color: #9fb3cc; padding: 5px 8px; border-radius: 6px 6px 0 0;
+		background: #0c1a2e; border: 1px solid #14283f; border-bottom: 0;
+		white-space: nowrap; overflow: hidden;
+	}
+
+	.bar { display: flex; gap: 3px; height: 64px; }
+	.clip {
+		border-radius: 6px; padding: 6px 7px; overflow: hidden;
+		display: flex; flex-direction: column; justify-content: space-between;
+		font-size: 11px; line-height: 1.2; cursor: default;
+		transition: transform 0.1s;
+	}
+	.clip:hover { transform: translateY(-3px); }
+	.clip .n { font-weight: 700; font-size: 12px; }
+	.clip .d { opacity: 0.75; }
+	.stock { background: #123c33; border: 1px solid #1e6b58; color: #7fe0c3; }
+	.placa { background: #2b2350; border: 1px solid #4c3f8f; color: #b9a8f5; }
+	.real  { background: #0b2c47; border: 1px solid #1c5480; color: #7cc7f2; }
+
+	.ruler { display: flex; margin-top: 6px; font-size: 11px; color: #45607f; }
+	.ruler span { flex: 1; border-left: 1px solid #14283f; padding-left: 4px; }
+
+	.legend { display: flex; gap: 18px; margin: 22px 0 34px; font-size: 13px; color: #9fb3cc; }
+	.dot { display: inline-block; width: 11px; height: 11px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+	table { width: 100%; border-collapse: collapse; font-size: 13px; }
+	th {
+		text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+		color: #45607f; padding: 6px 10px; border-bottom: 1px solid #14283f;
+	}
+	td { padding: 7px 10px; border-bottom: 1px solid #0c1a2e; color: #9fb3cc; }
+	td.t { font-family: Consolas, monospace; color: #dbe7f5; white-space: nowrap; }
+	td.f { font-family: Consolas, monospace; font-size: 12px; }
+	tr.hoy td.estado { color: #7fe0c3; font-weight: 600; }
+	tr.man td.estado { color: #7cc7f2; }
+	td .tag { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; }
+</style>
+</head>
+<body>
+	<h1>Remit<b>IA</b> — mapa de los 3 minutos</h1>
+	<div class="stats">
+		<span class="stat">Total: <b>3:00</b> (180 s)</span>
+		<span class="stat">Demo real: <b>140 s · 78%</b></span>
+		<span class="stat">Stock: <b>31 s</b></span>
+		<span class="stat">Placas: <b>9 s</b></span>
+		<span class="stat">Listo HOY: <b>6 clips</b></span>
+		<span class="stat">Se filma MAÑANA: <b>10 clips</b></span>
+	</div>
+
+	<div class="acts">
+		<div class="act" style="width:14.44%">1 · Problema</div>
+		<div class="act" style="width:8.89%">2 · Solución</div>
+		<div class="act" style="width:72.22%">3 · Demo real</div>
+		<div class="act" style="width:4.44%">4 · Cierre</div>
+	</div>
+
+	<div class="bar">
+		<div class="clip stock" style="width:4.44%"  title="0:00–0:08 · Camión llega · VO-01"><span class="n">01</span><span class="d">8s</span></div>
+		<div class="clip stock" style="width:4.44%"  title="0:08–0:16 · Descarga de cajas · VO-02"><span class="n">02</span><span class="d">8s</span></div>
+		<div class="clip stock" style="width:5.56%"  title="0:16–0:26 · Conteo a mano · VO-03"><span class="n">03</span><span class="d">10s</span></div>
+		<div class="clip placa" style="width:3.33%"  title="0:26–0:32 · Placa título"><span class="n">04</span><span class="d">6s</span></div>
+		<div class="clip real"  style="width:5.56%"  title="0:32–0:42 · T1 sin internet · VO-04"><span class="n">05</span><span class="d">10s</span></div>
+		<div class="clip real"  style="width:7.78%"  title="0:42–0:56 · T2 foto al remito · VO-05"><span class="n">06</span><span class="d">14s</span></div>
+		<div class="clip real"  style="width:5.56%"  title="0:56–1:06 · T3 procesando · VO-06"><span class="n">07</span><span class="d">10s</span></div>
+		<div class="clip real"  style="width:5.56%"  title="1:06–1:16 · T4 foto mala · VO-07"><span class="n">08</span><span class="d">10s</span></div>
+		<div class="clip real"  style="width:10%"    title="1:16–1:34 · T5 revisión ambigua · VO-08"><span class="n">09</span><span class="d">18s</span></div>
+		<div class="clip real"  style="width:8.89%"  title="1:34–1:50 · T6 alta de SKU · VO-09"><span class="n">10</span><span class="d">16s</span></div>
+		<div class="clip real"  style="width:12.22%" title="1:50–2:12 · T7 escaneo de cajas · VO-10"><span class="n">11</span><span class="d">22s</span></div>
+		<div class="clip real"  style="width:6.67%"  title="2:12–2:24 · T8 confirmar faltante · VO-11"><span class="n">12</span><span class="d">12s</span></div>
+		<div class="clip real"  style="width:11.11%" title="2:24–2:44 · T9 reclamo · VO-12"><span class="n">13</span><span class="d">20s</span></div>
+		<div class="clip real"  style="width:4.44%"  title="2:44–2:52 · T10 resumen · VO-13"><span class="n">14</span><span class="d">8s</span></div>
+		<div class="clip stock" style="width:2.78%"  title="2:52–2:57 · Camión se va · VO-14"><span class="n">15</span><span class="d">5s</span></div>
+		<div class="clip placa" style="width:1.67%"  title="2:57–3:00 · Placa final"><span class="n">16</span><span class="d">3s</span></div>
+	</div>
+
+	<div class="ruler">
+		<span>0:00</span><span>0:30</span><span>1:00</span><span>1:30</span><span>2:00</span><span>2:30</span>
+	</div>
+
+	<div class="legend">
+		<span><span class="dot" style="background:#1e6b58"></span>Stock (se baja HOY)</span>
+		<span><span class="dot" style="background:#4c3f8f"></span>Placa (se graba HOY)</span>
+		<span><span class="dot" style="background:#1c5480"></span>Real (se filma MAÑANA)</span>
+	</div>
+
+	<table>
+		<thead><tr><th>#</th><th>Tiempo</th><th>Archivo</th><th>Qué se ve</th><th>Audio</th><th>Estado</th></tr></thead>
+		<tbody>
+			<tr class="hoy"><td>01</td><td class="t">0:00–0:08</td><td class="f">01-stock-camion.mp4</td><td><span class="tag" style="background:#1e6b58"></span>Camión de reparto llega al local</td><td>VO-01 + música sube</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>02</td><td class="t">0:08–0:16</td><td class="f">02-stock-descarga.mp4</td><td><span class="tag" style="background:#1e6b58"></span>Descarga de cajas al carrito</td><td>VO-02</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>03</td><td class="t">0:16–0:26</td><td class="f">03-stock-conteo.mp4</td><td><span class="tag" style="background:#1e6b58"></span>Empleado cuenta cajas con papel</td><td>VO-03</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>04</td><td class="t">0:26–0:32</td><td class="f">04-placa-titulo.mp4</td><td><span class="tag" style="background:#4c3f8f"></span>Logo + tagline</td><td>Golpe musical</td><td class="estado">HOY</td></tr>
+			<tr class="man"><td>05</td><td class="t">0:32–0:42</td><td class="f">05-t1-sin-internet.mp4</td><td><span class="tag" style="background:#1c5480"></span>Google sin internet + app READY</td><td>VO-04</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>06</td><td class="t">0:42–0:56</td><td class="f">06-t2-foto-remito.mp4</td><td><span class="tag" style="background:#1c5480"></span>Manos + remito + foto desde la app</td><td>VO-05</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>07</td><td class="t">0:56–1:06</td><td class="f">07-t3-procesando.mp4</td><td><span class="tag" style="background:#1c5480"></span>Pantalla Procesando</td><td>VO-06</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>08</td><td class="t">1:06–1:16</td><td class="f">08-t4-foto-mala.mp4</td><td><span class="tag" style="background:#1c5480"></span>Foto movida → rechazo</td><td>VO-07</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>09</td><td class="t">1:16–1:34</td><td class="f">09-t5-revision.mp4</td><td><span class="tag" style="background:#1c5480"></span>Pregunta del Bilbao → "cromado"</td><td>VO-08</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>10</td><td class="t">1:34–1:50</td><td class="f">10-t6-alta-sku.mp4</td><td><span class="tag" style="background:#1c5480"></span>Alta de la ducha ACC-DUCH-01</td><td>VO-09</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>11</td><td class="t">1:50–2:12</td><td class="f">11-t7-escaneo.mp4</td><td><span class="tag" style="background:#1c5480"></span>Escaneo de las 3 cajas iguales</td><td>VO-10</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>12</td><td class="t">2:12–2:24</td><td class="f">12-t8-confirmar.mp4</td><td><span class="tag" style="background:#1c5480"></span>Modal "¿Ya contaste todo?"</td><td>VO-11</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>13</td><td class="t">2:24–2:44</td><td class="f">13-t9-reclamo.mp4</td><td><span class="tag" style="background:#1c5480"></span>Reclamo con tabla de hechos</td><td>VO-12</td><td class="estado">MAÑANA</td></tr>
+			<tr class="man"><td>14</td><td class="t">2:44–2:52</td><td class="f">14-t10-resumen.mp4</td><td><span class="tag" style="background:#1c5480"></span>Resumen + sello QVAC</td><td>VO-13</td><td class="estado">MAÑANA</td></tr>
+			<tr class="hoy"><td>15</td><td class="t">2:52–2:57</td><td class="f">15-stock-camion-se-va.mp4</td><td><span class="tag" style="background:#1e6b58"></span>El camión se va</td><td>VO-14</td><td class="estado">HOY</td></tr>
+			<tr class="hoy"><td>16</td><td class="t">2:57–3:00</td><td class="f">16-placa-final.mp4</td><td><span class="tag" style="background:#4c3f8f"></span>Equipo · track · repo</td><td>Música cierra</td><td class="estado">HOY</td></tr>
+		</tbody>
+	</table>
+</body>
+</html>
