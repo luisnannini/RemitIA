@@ -66,6 +66,8 @@ Escanear la misma caja N veces vale por N unidades.
 
 ## Guion de edición (cortes, voz y rótulos)
 
+> **Superado por `guion-maestro.md`**: el guion maestro suma la intro con b-roll IA y reajusta el minutado. Las tomas T1–T10 se filman igual que acá. Usá esta tabla solo como referencia del contenido de cada toma.
+
 | # | Tiempo | Qué se ve | Voz en off (inglés) | Rótulo en pantalla |
 |---|---|---|---|---|
 | T1 | 0:00–0:15 | Google sin internet + app READY | "This is RemitIA. Everything you'll see — OCR, a language model, product matching — runs on this laptop with QVAC by Tether. No cloud. Look: no internet, and it still works." | 100% LOCAL · NO CLOUD |
