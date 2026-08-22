@@ -137,7 +137,10 @@ function computeSummary(current: MockState): ReceptionSummary {
 
 	return {
 		expected_lines: current.lines.length,
-		resolved_lines: current.lines.filter((line) => !isBlocking(line)).length,
+		// PRD 7: una línea `unresolved` no participa del conteo ni del snapshot;
+		// "resuelta" acá significa `matched` (tiene SKU). Así el número coincide
+		// con la sección "Ya resueltas" de la pantalla de revisión.
+		resolved_lines: current.lines.filter((line) => line.match.status === 'matched').length,
 		units_expected: unitsExpected,
 		units_counted: unitsCounted,
 		missing_units: missing,

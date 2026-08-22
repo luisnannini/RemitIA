@@ -85,10 +85,12 @@ src/
 │  │  ├─ mock/                # ⚠️ solo dev: fixtures + doble del backend
 │  │  └─ index.ts             # switch mock/real + polling y su corte (ADR-004)
 │  ├─ ui/
-│  │  ├─ labels.ts            # textos en español de los valores canónicos
+│  │  ├─ labels.ts            # textos y clases por estado canónico
+│  │  ├─ new-product.ts       # validación de forma del alta de SKU (flujo c)
+│  │  ├─ actions.ts           # error del contrato atribuido a una línea
 │  │  └─ document-file.ts     # validación local JPG/PNG ≤ 12 MB (PRD 8.3)
 │  └─ components/
-│     ├─ HealthBanner, LineCard, MatchBadge, ErrorPanel, LocalSeal, Spinner
+│     ├─ HealthBanner, LineCard, MatchBadge, MatchStatusIcon, ErrorPanel, LocalSeal, Spinner
 │     ├─ DocumentPicker.svelte # cámara/archivo + preview con objectURL
 │     └─ screens/             # Procesando, Fallo, Revisión, Recepción guiada, Resumen
 └─ routes/
@@ -122,6 +124,46 @@ src/
 
   El POST no es idempotente, así que un reintento a ciegas puede crear una
   segunda recepción: solo se reintenta cuando el servidor lo pide con `retry`.
+
+## Revisión con los tres flujos (FE-03)
+
+La pantalla de revisión (`screens/ReviewScreen.svelte` + `LineCard.svelte`) es la
+que más tiempo ocupa en el video (guion 1:00–1:40).
+
+- **Estado de la línea con tres señales redundantes**: color (barra lateral y
+  fondo), ícono de forma distinta (tilde, interrogación, triángulo, círculo
+  tachado) y texto. Se lee en un celular sin zoom y no depende solo del color.
+- **Lo que bloquea va primero**: dos grupos, `Para resolver · N` y
+  `Ya resueltas · N`, más un contador grande "Quedan N líneas por resolver".
+  Agrupar y contar tarjetas es presentación: el estado de cada línea lo publica
+  la API en `match.status` y la definición de bloqueante (PRD 7) solo se usa para
+  ordenar (`needsHumanAction` en `ui/labels.ts`).
+- **Flujo (b)**: la pregunta va destacada y cada candidato es un botón de un
+  toque con nombre + SKU. La lista sale de `match.candidates` y, además, el
+  handler revalida contra esa lista antes de emitir: un SKU ajeno a la pregunta
+  no se puede mandar ni tocando el DOM. Si la API marca `ambiguous` sin publicar
+  pregunta, la línea cae al panel del flujo (c) en vez de quedar sin salida.
+- **Flujo (c)**: buscador client-side sobre el catálogo ya cargado (nombre, SKU y
+  alias, hasta 8 resultados), alta de SKU nuevo y "dejar sin resolver". Las tres
+  variantes mandan el body exacto de 8.6, con **una sola clave por request**.
+- **Alta de SKU**: el SKU se normaliza mientras se tipea (mayúsculas, espacios
+  convertidos en guiones) y se valida contra `^[A-Z0-9][A-Z0-9-]*$`; nombre
+  obligatorio. Si el SKU ya está en el catálogo cargado se **avisa pero no se
+  bloquea**: la unicidad
+  la decide la API y su `SKU_ALREADY_EXISTS` se muestra dentro de la tarjeta de
+  esa línea, junto al botón que la persona tocó. El nombre arranca con el texto
+  del remito para editarlo; el SKU siempre lo escribe la persona.
+- **Evidencia sin ruido**: el `source_text` está siempre a la vista; confianza de
+  OCR, similitud lexical y bloques van en un detalle expandible, abierto en las
+  bloqueantes y colapsado en las resueltas. Si la API no publica esos números, lo
+  dice en vez de inventarlos.
+- **Foto del remito**: se despliega en línea desde `preview_url` (PRD 8.10) y se
+  puede abrir entera en otra pestaña. Nunca tapa la pantalla.
+- **Transición**: al resolver la última línea bloqueante la API pasa sola a
+  `receiving` y el router cambia de pantalla. La web no fuerza nada; el aviso
+  "todo resuelto, pasando al conteo" solo describe lo que ya devolvió la API.
+- Después de un alta se vuelve a pedir `GET /catalog` (silenciosamente): el
+  catálogo cambió y el buscador y el nombre del producto asignado lo usan.
 
 ## Reglas que respeta esta app
 

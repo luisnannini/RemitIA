@@ -8,6 +8,7 @@
 	 */
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 	import {
 		ApiError,
 		getApiClient,
@@ -35,7 +36,14 @@
 	let error = $state<ApiError | null>(null);
 	let loading = $state(true);
 
-	let busyLineId = $state<string | null>(null);
+	/**
+	 * Estado de las acciones de línea, indexado por `line_id` (ver `$lib/ui/actions`):
+	 * dos líneas pendientes pueden tener acciones en vuelo a la vez y ninguna
+	 * puede pisar el `busy` ni el error de la otra.
+	 */
+	let busyLines = new SvelteSet<string>();
+	/** Rechazo del servidor atribuido a la línea que lo provocó (PRD 8.11). */
+	let lineErrors = new SvelteMap<string, ApiError>();
 	let scanning = $state(false);
 	let finalizing = $state(false);
 	let claiming = $state(false);
@@ -61,9 +69,20 @@
 		}
 	}
 
-	/** Catálogo: se carga una vez y se filtra client-side (PRD 8.2). */
-	async function loadCatalog() {
-		const catalog = await withClient((client) => client.getCatalog());
+	/**
+	 * Catálogo: se carga una vez y se filtra client-side (PRD 8.2). Se vuelve a
+	 * pedir después de un alta de SKU, que lo modifica (PRD 8.6).
+	 *
+	 * Ese refresco va en modo `silent`: el alta ya la aceptó la API y la vista
+	 * devuelta es la verdad; no poder releer el catálogo no debería pisar la
+	 * pantalla con un error.
+	 */
+	async function loadCatalog(silent = false) {
+		const catalog = silent
+			? await getApiClient()
+					.then((client) => client.getCatalog())
+					.catch(() => null)
+			: await withClient((client) => client.getCatalog());
 		if (catalog) products = catalog.products;
 	}
 
@@ -100,6 +119,7 @@
 
 		loading = true;
 		error = null;
+		lineErrors.clear();
 		elapsedSeconds = 0;
 
 		(async () => {
@@ -149,23 +169,62 @@
 
 	/* ---- Acciones: cada una renderiza exclusivamente la vista devuelta ---- */
 
+	/**
+	 * Acciones sobre una línea (flujos b y c). Tres diferencias con el resto:
+	 *
+	 *   - el `busy` y el error viven bajo el `line_id` que los produjo: dos
+	 *     acciones simultáneas sobre líneas distintas no se pisan;
+	 *   - el rechazo del servidor se muestra DENTRO de la tarjeta de esa línea,
+	 *     que es donde está el botón que la persona acaba de tocar
+	 *     (`SKU_ALREADY_EXISTS` es el caso típico del flujo c);
+	 *   - si el error no se puede atribuir a una línea, cae al panel global.
+	 *
+	 * Devuelve la vista publicada por la API, o `null` si la llamada falló: quien
+	 * necesite encadenar algo debe mirar ese valor y no un estado compartido, que
+	 * después del `await` ya puede ser de otra línea.
+	 *
+	 * La vista se reemplaza por la que devuelve la API y nada más: la transición
+	 * a `receiving` (PRD 7) llega en ese `status`, no la decide esta función.
+	 */
+	async function runOnLine(
+		lineId: string | null,
+		run: (client: ApiClient) => Promise<ReceptionView>
+	): Promise<ReceptionView | null> {
+		if (lineId) {
+			busyLines.add(lineId);
+			lineErrors.delete(lineId);
+		}
+		error = null;
+		try {
+			const client = await getApiClient();
+			const next = await run(client);
+			view = next;
+			return next;
+		} catch (cause) {
+			if (lineId && isApiError(cause)) lineErrors.set(lineId, cause);
+			else handle(cause);
+			return null;
+		} finally {
+			if (lineId) busyLines.delete(lineId);
+		}
+	}
+
 	async function answer(questionId: string, selectedSku: string) {
 		const line = view?.lines.find((item) => item.match.question?.question_id === questionId);
-		busyLineId = line?.line_id ?? null;
-		error = null;
-		const next = await withClient((client) =>
+		await runOnLine(line?.line_id ?? null, (client) =>
 			client.answerQuestion(receptionId, { question_id: questionId, selected_sku: selectedSku })
 		);
-		if (next) view = next;
-		busyLineId = null;
 	}
 
 	async function assign(lineId: string, payload: AssignRequest) {
-		busyLineId = lineId;
-		error = null;
-		const next = await withClient((client) => client.assignLine(receptionId, lineId, payload));
-		if (next) view = next;
-		busyLineId = null;
+		const next = await runOnLine(lineId, (client) =>
+			client.assignLine(receptionId, lineId, payload)
+		);
+		// El alta agrega un producto al catálogo (PRD 8.6): la copia local quedó
+		// vieja y el buscador y el nombre del producto asignado la usan. La
+		// decisión se toma con el resultado de ESTA llamada, no leyendo estado
+		// después del `await`: otra línea puede haber escrito ahí mientras tanto.
+		if (next && 'new_product' in payload) await loadCatalog(true);
 	}
 
 	async function scan(code: string) {
@@ -243,7 +302,14 @@
 		{#if view.status === 'processing_document' || view.status === 'draft'}
 			<ProcessingScreen {view} {elapsedSeconds} />
 		{:else if view.status === 'needs_document_review'}
-			<ReviewScreen {view} {products} {busyLineId} onanswer={answer} onassign={assign} />
+			<ReviewScreen
+				{view}
+				{products}
+				{busyLines}
+				{lineErrors}
+				onanswer={answer}
+				onassign={assign}
+			/>
 		{:else if view.status === 'receiving'}
 			<ReceivingScreen {view} {scanning} {finalizing} onscan={scan} onfinalize={finalize} />
 		{:else if view.status === 'ready_to_claim' || view.status === 'closed'}
