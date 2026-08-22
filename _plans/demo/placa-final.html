@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RemitIA — placa final (grabar en pantalla completa)</title>
+<style>
+	* { margin: 0; box-sizing: border-box; }
+	html, body { height: 100%; }
+	body {
+		background: #060d1a;
+		font-family: "Segoe UI", system-ui, Arial, sans-serif;
+		overflow: hidden; cursor: none;
+	}
+	.stage {
+		position: relative; height: 100%;
+		display: flex; flex-direction: column; align-items: center; justify-content: center;
+		gap: 2vh;
+		background: radial-gradient(ellipse 80% 60% at 50% 45%, #0c1e38 0%, #060d1a 70%);
+	}
+	.logo {
+		font-size: 6.5vw; font-weight: 700; letter-spacing: -0.02em;
+		color: #f3f7fc; line-height: 1;
+		opacity: 0; transform: translateY(2.5vh);
+	}
+	.logo b { color: #38bdf8; font-weight: 700; }
+	.line {
+		font-size: 2vw; color: #9fb3cc; letter-spacing: 0.02em;
+		opacity: 0; transform: translateY(2vh);
+	}
+	.line b { color: #dbe7f5; font-weight: 600; }
+	.repo {
+		font-family: Consolas, "Courier New", monospace;
+		font-size: 1.8vw; color: #38bdf8;
+		opacity: 0; transform: translateY(2vh);
+	}
+	.motto {
+		margin-top: 2.5vh; font-size: 1.6vw; font-weight: 600;
+		letter-spacing: 0.2em; text-transform: uppercase; color: #45607f;
+		opacity: 0; transform: translateY(2vh);
+	}
+	.playing .logo   { animation: rise 0.9s cubic-bezier(.2,.7,.2,1) 0.2s forwards; }
+	.playing .l1     { animation: rise 0.8s cubic-bezier(.2,.7,.2,1) 0.8s forwards; }
+	.playing .l2     { animation: rise 0.8s cubic-bezier(.2,.7,.2,1) 1.2s forwards; }
+	.playing .repo   { animation: rise 0.8s cubic-bezier(.2,.7,.2,1) 1.6s forwards; }
+	.playing .motto  { animation: rise 0.8s cubic-bezier(.2,.7,.2,1) 2.2s forwards; }
+	@keyframes rise { to { opacity: 1; transform: translateY(0); } }
+	.hint {
+		position: fixed; inset: auto 0 4vh 0; text-align: center;
+		font-size: 1.2vw; color: #45607f; cursor: default;
+	}
+	.playing .hint { display: none; }
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+	<div class="logo">Remit<b>IA</b></div>
+	<div class="line l1">Built for the <b>QVAC by Tether</b> track</div>
+	<div class="line l2"><b>Luis · Rachid · Nahuel</b></div>
+	<div class="repo">github.com/RachidEsper/RemitIA</div>
+	<div class="motto">Real pipeline · No cloud · No fakes</div>
+	<p class="hint">F11 para pantalla completa → iniciá la grabación (Win+Alt+R) → clic para lanzar la animación</p>
+</div>
+<script>
+	const stage = document.getElementById('stage');
+	document.addEventListener('click', () => {
+		stage.classList.remove('playing');
+		void stage.offsetWidth;
+		stage.classList.add('playing');
+	});
+</script>
+</body>
+</html>
