@@ -13,6 +13,7 @@
 		getApiClient,
 		isApiError,
 		pollReception,
+		stopsPolling,
 		type ApiClient,
 		type AssignRequest,
 		type CatalogProduct,
@@ -21,6 +22,7 @@
 	import { newClientEventId } from '$lib/ui/labels';
 	import ErrorPanel from '$lib/components/ErrorPanel.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
+	import FailedScreen from '$lib/components/screens/FailedScreen.svelte';
 	import ProcessingScreen from '$lib/components/screens/ProcessingScreen.svelte';
 	import ReceivingScreen from '$lib/components/screens/ReceivingScreen.svelte';
 	import ReviewScreen from '$lib/components/screens/ReviewScreen.svelte';
@@ -41,6 +43,8 @@
 	let resetting = $state(false);
 
 	let elapsedSeconds = $state(0);
+	/** Se incrementa para re-ejecutar el efecto de carga/polling (reintento manual). */
+	let pollToken = $state(0);
 
 	function handle(cause: unknown) {
 		error = isApiError(cause) ? cause : null;
@@ -63,16 +67,36 @@
 		if (catalog) products = catalog.products;
 	}
 
+	/** El catálogo se carga una sola vez por montaje (PRD 8.2). */
+	$effect(() => {
+		void loadCatalog();
+	});
+
 	/**
-	 * Carga inicial + polling mientras el documento se procesa (ADR-004).
-	 * El corte lo decide el `status` publicado por la API, no la web.
+	 * Carga inicial + polling cada 750 ms mientras el documento se procesa (ADR-004).
+	 *
+	 * El corte lo decide el `status` publicado por la API, no la web: `stopsPolling`
+	 * corta en `failed`, `needs_document_review`, `receiving`, `ready_to_claim` y
+	 * `closed`, y sigue solo en `draft` / `processing_document` (PRD 7).
+	 *
+	 * `pollToken` es una dependencia explícita: incrementarlo re-ejecuta el efecto
+	 * (con su teardown) y reanuda el polling tras un error.
 	 */
 	$effect(() => {
 		const id = receptionId;
+		void pollToken;
 		if (!id) return;
 
 		const controller = new AbortController();
-		let ticker: ReturnType<typeof setInterval> | null = null;
+		const startedAt = Date.now();
+		let ticker: ReturnType<typeof setInterval> | null = setInterval(() => {
+			elapsedSeconds = Math.floor((Date.now() - startedAt) / 1000);
+		}, 250);
+
+		const stopTicker = () => {
+			if (ticker) clearInterval(ticker);
+			ticker = null;
+		};
 
 		loading = true;
 		error = null;
@@ -83,19 +107,17 @@
 				handle(cause);
 				return null;
 			});
-			if (!client || controller.signal.aborted) return;
+			if (!client || controller.signal.aborted) {
+				stopTicker();
+				return;
+			}
 
 			try {
 				const first = await client.getReception(id, { signal: controller.signal });
 				view = first;
 				loading = false;
 
-				if (first.status === 'processing_document') {
-					const started = Date.now();
-					ticker = setInterval(() => {
-						elapsedSeconds = Math.floor((Date.now() - started) / 1000);
-					}, 500);
-
+				if (!stopsPolling(first.status)) {
 					const final = await pollReception(id, {
 						signal: controller.signal,
 						onView: (next) => {
@@ -109,17 +131,21 @@
 				loading = false;
 				handle(cause);
 			} finally {
-				if (ticker) clearInterval(ticker);
+				stopTicker();
 			}
 		})();
 
-		void loadCatalog();
-
 		return () => {
 			controller.abort();
-			if (ticker) clearInterval(ticker);
+			stopTicker();
 		};
 	});
+
+	/** Reanuda la consulta tras un error de red o el techo de espera del cliente. */
+	function resume() {
+		error = null;
+		pollToken += 1;
+	}
 
 	/* ---- Acciones: cada una renderiza exclusivamente la vista devuelta ---- */
 
@@ -194,14 +220,6 @@
 		resetting = false;
 		if (done) await goto('/');
 	}
-
-	async function reload() {
-		loading = true;
-		error = null;
-		const next = await withClient((client) => client.getReception(receptionId));
-		if (next) view = next;
-		loading = false;
-	}
 </script>
 
 {#if loading && !view}
@@ -213,13 +231,13 @@
 	<div class="grid gap-3 py-8">
 		<!-- `start_over` (ej. RECEPTION_NOT_FOUND) vuelve al inicio; reintentar el
 		     mismo GET con el mismo id volvería a fallar igual. -->
-		<ErrorPanel {error} onretry={error?.userAction === 'start_over' ? () => goto('/') : reload} />
+		<ErrorPanel {error} onretry={error?.userAction === 'start_over' ? () => goto('/') : resume} />
 		<a href="/" class="btn-secondary w-full">Volver al inicio</a>
 	</div>
 {:else}
 	<div class="grid gap-4">
 		{#if error}
-			<ErrorPanel {error} onretry={reload} compact />
+			<ErrorPanel {error} onretry={resume} compact />
 		{/if}
 
 		{#if view.status === 'processing_document' || view.status === 'draft'}
@@ -239,14 +257,7 @@
 				onreset={reset}
 			/>
 		{:else if view.status === 'failed'}
-			<section class="card">
-				<h1 class="text-lg font-bold text-white">No pude procesar el remito</h1>
-				<p class="mt-1.5 text-sm text-slate-400">
-					La foto no pudo leerse con seguridad. Probá con otra imagen, mejor iluminada y sin
-					inclinación.
-				</p>
-				<a href="/" class="btn-primary mt-4 w-full">Sacar otra foto</a>
-			</section>
+			<FailedScreen {view} />
 		{/if}
 	</div>
 {/if}

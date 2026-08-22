@@ -10,15 +10,67 @@
  *   línea 2  → ambigua con dos candidatos (flujo b)
  *   línea 3  → sin candidato (flujo c: asignar / alta / unresolved)
  *   línea 4  → match directo que terminará con FALTANTE al contar
+ *
+ * Escenario C del PRD 11.3 — foto deficiente: ver `MOCK_SCENARIO_C_TRIGGERS`.
  */
 
-import type { Catalog, HealthView, ReceptionLine, ReceptionSummary } from '../types';
+import type { Catalog, HealthView, ReceptionDocument, ReceptionLine, ReceptionSummary } from '../types';
 
 /**
  * Marcador único para verificar por grep que el mock no llegó al build.
  * Ver README de `apps/web`: `grep -r REMITIA_MOCK_FIXTURE build/` debe dar vacío.
  */
 export const MOCK_FIXTURE_MARKER = 'REMITIA_MOCK_FIXTURE_ONLY_DEV';
+
+/** Segundo marcador, para el escenario C. También debe estar ausente del build. */
+export const MOCK_SCENARIO_C_MARKER = 'REMITIA_MOCK_SCENARIO_C';
+
+/**
+ * Disparadores del escenario C (PRD 11.3, foto deficiente) POR NOMBRE DE ARCHIVO.
+ *
+ * Existen solo en el adapter fake: el contrato no cambia y el backend real no
+ * mira el nombre del archivo para nada. Sirven para poder navegar en dev el
+ * camino "foto deficiente → nueva foto" sin depender de QVAC.
+ *
+ *   - `borrosa` → el POST se acepta (202) y la extracción termina en `failed`.
+ *                 Es el escenario C completo: ejercita el polling y su corte.
+ *   - `mala`    → el POST se rechaza en el acto con `DOCUMENT_LOW_QUALITY` y
+ *                 `user_action: take_another_photo`. Ejercita el ErrorPanel del Home.
+ *
+ * La comparación ignora mayúsculas y tildes: "Remito Borroso.jpg" también entra.
+ */
+export const MOCK_SCENARIO_C_TRIGGERS = {
+	asyncFailure: 'borros',
+	uploadReject: 'mala'
+} as const;
+
+function normalize(value: string): string {
+	return value
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/[\u0300-\u036f]/g, '');
+}
+
+export type MockScenarioC = 'async_failure' | 'upload_reject' | null;
+
+/** Qué variante del escenario C pide este nombre de archivo, si es que pide alguna. */
+export function mockScenarioCFor(filename: string): MockScenarioC {
+	const name = normalize(filename);
+	if (name.includes(MOCK_SCENARIO_C_TRIGGERS.uploadReject)) return 'upload_reject';
+	if (name.includes(MOCK_SCENARIO_C_TRIGGERS.asyncFailure)) return 'async_failure';
+	return null;
+}
+
+/** Documento tal como lo publica la vista canónica cuando la extracción falló. */
+export const MOCK_LOW_QUALITY_DOCUMENT: Omit<ReceptionDocument, 'filename' | 'preview_url'> = {
+	provider_name: null,
+	remit_number: null,
+	ocr_quality: 0.21,
+	warnings: [
+		'La foto está movida: no se leen los renglones del cuerpo del remito.',
+		'No pude identificar el número de remito ni el proveedor.'
+	]
+};
 
 export const MOCK_CATALOG: Catalog = {
 	catalog_id: 'demo-main',

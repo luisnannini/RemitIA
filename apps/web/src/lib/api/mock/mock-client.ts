@@ -41,7 +41,10 @@ import {
 	MOCK_EMPTY_SUMMARY,
 	MOCK_FIXTURE_MARKER,
 	MOCK_HEALTH_READY,
-	mockInitialLines
+	MOCK_LOW_QUALITY_DOCUMENT,
+	MOCK_SCENARIO_C_MARKER,
+	mockInitialLines,
+	mockScenarioCFor
 } from './fixtures';
 
 /** Latencias simuladas para que el spinner y el polling se vean reales. */
@@ -57,6 +60,8 @@ interface MockState {
 	created_at: string;
 	filename: string;
 	extractedAt: number | null;
+	/** Escenario C (PRD 11.3): la extracción termina en `failed` en vez de en líneas. */
+	extractionFails: boolean;
 	lines: ReceptionLine[];
 	unexpected: UnexpectedItem[];
 	claim: Claim | null;
@@ -158,6 +163,9 @@ function toView(current: MockState): ReceptionView {
 		discrepancy: computeDiscrepancy(line)
 	}));
 
+	const pending = current.status === 'draft' || current.status === 'processing_document';
+	const documentBase = current.status === 'failed' ? MOCK_LOW_QUALITY_DOCUMENT : MOCK_DOCUMENT;
+
 	return {
 		id: current.id,
 		status: current.status,
@@ -166,22 +174,37 @@ function toView(current: MockState): ReceptionView {
 			current.status === 'draft'
 				? null
 				: {
-						...MOCK_DOCUMENT,
+						...documentBase,
+						// Mientras se procesa no hay evidencia publicada todavía:
+						// ProcessingScreen marca pasos SOLO con evidencia real.
+						...(pending
+							? { ocr_quality: null, provider_name: null, remit_number: null, warnings: [] }
+							: {}),
 						filename: current.filename,
 						preview_url: `/api/v1/receptions/${current.id}/document`
 					},
-		lines: current.status === 'processing_document' ? [] : lines,
+		lines: pending ? [] : lines,
 		unexpected_items: current.unexpected,
-		summary: current.status === 'processing_document' ? MOCK_EMPTY_SUMMARY : computeSummary(current),
+		summary: pending ? MOCK_EMPTY_SUMMARY : computeSummary(current),
 		claim: current.claim,
 		latest_trace_id: `trace_${MOCK_FIXTURE_MARKER}`
 	};
 }
 
-/** El "worker" de extracción: tras `EXTRACTION_MS` la recepción queda revisable. */
+/**
+ * El "worker" de extracción: tras `EXTRACTION_MS` la recepción queda revisable,
+ * o cae en `failed` si el escenario C está activo (PRD 7: fallo técnico → failed).
+ */
 function tickExtraction(current: MockState) {
 	if (current.status !== 'processing_document' || current.extractedAt === null) return;
 	if (Date.now() < current.extractedAt) return;
+
+	if (current.extractionFails) {
+		current.status = 'failed';
+		current.lines = [];
+		return;
+	}
+
 	current.status = 'needs_document_review';
 	current.lines = mockInitialLines();
 	advanceIfUnblocked(current);
@@ -231,6 +254,36 @@ export function createMockClient(): ApiClient {
 				);
 			}
 
+			if (document.size > 12 * 1024 * 1024) {
+				throw new ApiError(
+					{
+						code: 'INVALID_FILE',
+						message: 'La foto supera los 12 MB permitidos.',
+						retryable: false,
+						user_action: 'take_another_photo',
+						trace_id: `trace_${MOCK_FIXTURE_MARKER}`,
+						details: { size_bytes: document.size }
+					},
+					413
+				);
+			}
+
+			// Escenario C del PRD 11.3, variante "rechazo en la subida".
+			const scenarioC = mockScenarioCFor(document.name || '');
+			if (scenarioC === 'upload_reject') {
+				throw new ApiError(
+					{
+						code: 'DOCUMENT_LOW_QUALITY',
+						message: 'La foto no se lee con seguridad: está movida y sin foco.',
+						retryable: false,
+						user_action: 'take_another_photo',
+						trace_id: `trace_${MOCK_SCENARIO_C_MARKER}`,
+						details: {}
+					},
+					422
+				);
+			}
+
 			const id = nextId('rec');
 			state = {
 				id,
@@ -238,6 +291,8 @@ export function createMockClient(): ApiClient {
 				created_at: new Date().toISOString(),
 				filename: document.name || 'remito.jpg',
 				extractedAt: Date.now() + EXTRACTION_MS,
+				// Escenario C, variante "falla asíncrona": 202 y luego `failed`.
+				extractionFails: scenarioC === 'async_failure',
 				lines: [],
 				unexpected: [],
 				claim: null,

@@ -46,10 +46,29 @@ En `vite build` esa rama es dead code: Rollup no emite el chunk. Verificación:
 
 ```bash
 npm run build
-grep -ril "REMITIA_MOCK_FIXTURE" build/   # debe no encontrar nada
+grep -ril "REMITIA_MOCK_FIXTURE" build/     # debe no encontrar nada
+grep -ril "REMITIA_MOCK_SCENARIO_C" build/  # debe no encontrar nada
+grep -ril "borros" build/                   # trigger del escenario C
 ```
 
 Incluso forzando `VITE_REMITIA_API=mock npm run build` el bundle queda limpio.
+
+### Escenarios del mock (PRD 11.3)
+
+Por defecto el adapter fake reproduce el **escenario A**. El **escenario C**
+(foto deficiente) se dispara por el **nombre del archivo** que se elige en el
+Home. Es un atajo exclusivo del mock: el contrato no cambia y el backend real
+nunca mira el nombre del archivo.
+
+| Nombre del archivo contiene | Qué simula                                                             |
+| --------------------------- | ---------------------------------------------------------------------- |
+| `borros…` (borrosa, borroso) | `POST /receptions` responde 202 y la extracción termina en `failed`     |
+| `mala`                       | `POST /receptions` falla con `DOCUMENT_LOW_QUALITY` + `take_another_photo` |
+| cualquier otro               | Escenario A: cuatro líneas, una ambigua y una sin candidato             |
+
+Comparación sin distinguir mayúsculas ni tildes. Las dos variantes terminan en
+el mismo lugar: la UI ofrece sacar otra foto y el Home queda listo para capturar
+(`/?recapturar=1`).
 
 ## Mapa del código
 
@@ -64,15 +83,45 @@ src/
 │  │  ├─ contract.ts          # interfaz ApiClient
 │  │  ├─ http-client.ts       # implementación real
 │  │  ├─ mock/                # ⚠️ solo dev: fixtures + doble del backend
-│  │  └─ index.ts             # switch mock/real + helper de polling (ADR-004)
-│  ├─ ui/labels.ts            # textos en español de los valores canónicos
+│  │  └─ index.ts             # switch mock/real + polling y su corte (ADR-004)
+│  ├─ ui/
+│  │  ├─ labels.ts            # textos en español de los valores canónicos
+│  │  └─ document-file.ts     # validación local JPG/PNG ≤ 12 MB (PRD 8.3)
 │  └─ components/
 │     ├─ HealthBanner, LineCard, MatchBadge, ErrorPanel, LocalSeal, Spinner
-│     └─ screens/             # Procesando, Revisión, Recepción guiada, Resumen
+│     ├─ DocumentPicker.svelte # cámara/archivo + preview con objectURL
+│     └─ screens/             # Procesando, Fallo, Revisión, Recepción guiada, Resumen
 └─ routes/
-   ├─ +page.svelte            # Home
+   ├─ +page.svelte            # Home (`?recapturar=1` = listo para otra foto)
    └─ recepcion/[id]/         # elige la pantalla según `view.status`
 ```
+
+## Captura y procesamiento (FE-02)
+
+- La foto se valida en el dispositivo antes de subirla (tipo y ≤ 12 MB) y se
+  muestra una miniatura real, ampliable a pantalla completa. El server valida
+  igual: la validación local es UX, no negocio.
+- El botón "Iniciar recepción" se deshabilita tras el primer toque (PRD 8.3: no
+  hay `Idempotency-Key`).
+- El polling es de 750 ms y corta cuando el `status` deja de ser `draft` o
+  `processing_document`: `failed`, `needs_document_review`, `receiving`,
+  `ready_to_claim` y `closed` lo detienen (`stopsPolling` en `lib/api/index.ts`).
+- La pantalla Procesando no inventa progreso: un paso se marca como hecho solo
+  cuando la vista canónica trae la evidencia (`document.ocr_quality`,
+  `lines.length`, el cambio de `status`). El único número que corre es el tiempo
+  transcurrido, que es real. No hay porcentajes ni barra de progreso.
+- Mapeo de `user_action` del envelope (PRD 8.11) en el Home:
+
+| `user_action`          | Qué hace la Home                                              |
+| ---------------------- | ------------------------------------------------------------- |
+| `retry`                | Reintenta el mismo `POST /receptions` con la misma foto        |
+| `take_another_photo`   | Descarta la foto, resalta la captura y devuelve el foco        |
+| `start_over`           | Home limpio: sin foto y sin error                              |
+| `contact_support`      | Sin botón: muestra el `trace_id` para escalar                  |
+| desconocido o ausente  | Sin botón: la decisión vuelve a la persona                     |
+
+  El POST no es idempotente, así que un reintento a ciegas puede crear una
+  segunda recepción: solo se reintenta cuando el servidor lo pide con `retry`.
 
 ## Reglas que respeta esta app
 
