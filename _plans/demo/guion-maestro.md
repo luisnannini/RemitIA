@@ -54,29 +54,70 @@ La voz en off manda el ritmo. Grabá primero el audio completo. Después cortá 
 
 ---
 
-## Prompts para el b-roll IA (Google Veo u otro)
+## B-roll de contexto: stock primero, IA de respaldo
 
-Reglas para los 4 prompts:
+El rubro del video es "negocio de barrio" genérico. La voz en off nunca nombra el rubro.
+Así, cualquier clip de logística sirve y no hay que tocar remitos, etiquetas ni catálogo.
 
-- Pedí clips de 8 segundos, 16:9.
-- Generá 2 variantes por prompt. Elegí la mejor.
-- Nunca pidas texto legible ni logos: la IA los garabatea y arruina el plano.
+Plataformas gratis, sin marca de agua, uso comercial sin atribución:
+
+- **Pexels Videos** (pexels.com/videos) — la principal.
+- **Pixabay Videos** (pixabay.com/videos).
+- **Mixkit** (mixkit.co) — también tiene la música.
+- **Coverr** (coverr.co).
+
+Búsquedas en inglés por clip:
+
+| Clip | Búsquedas |
+|---|---|
+| IA-1 (camión llega) | "delivery truck arriving", "delivery van street", "cargo van parking" |
+| IA-2 (descarga) | "unloading boxes", "courier hand truck", "delivery man boxes" |
+| IA-3 (conteo a mano) | "warehouse worker clipboard", "counting boxes inventory", "checking delivery" |
+| IA-4 (cierre) | "delivery truck leaving", "van driving away street" |
+
+Reglas:
+
+- Filtrá por horizontal; bajá en 1080p o más. Clips de 8 a 15 segundos alcanzan.
+- Chequeá la licencia en la página de cada clip antes de bajar.
 - Nada de pantallas, celulares ni apps en el b-roll: eso es territorio de las tomas reales.
 - Emparejá el color de los 4 clips en la edición para que parezcan una sola cámara.
 
-**IA-1 — llegada:**
-"Cinematic 16:9 shot, morning light: a small white delivery truck pulls up and parks in front of a modest plumbing-supplies storefront on a quiet South American street. Handheld documentary feel, shallow depth of field, natural colors. No readable text, no logos, no close-up faces."
+### Plan B: generarlo con IA (Google Veo u otro)
 
-**IA-2 — descarga:**
-"Cinematic 16:9 medium shot: a delivery worker unloads cardboard boxes from the back of a small truck and stacks them on a hand cart on the sidewalk of a small hardware store. Morning light, handheld documentary style. No readable text, no logos."
+Solo si algún clip no aparece en stock. Pedí 8 segundos, 16:9, 2 variantes. Nunca pidas texto legible ni logos: la IA los garabatea.
 
-**IA-3 — conteo a mano:**
-"Cinematic 16:9 shot inside a small plumbing-supplies store: a store clerk holds a paper document and counts stacked cardboard boxes, slightly rushed. Warm practical lighting, handheld documentary style, shallow depth of field. The paper is seen at an angle, never readable. No logos."
+- **IA-1**: "Cinematic 16:9 shot, morning light: a small white delivery truck pulls up and parks in front of a modest storefront on a quiet South American street. Handheld documentary feel, shallow depth of field, natural colors. No readable text, no logos, no close-up faces."
+- **IA-2**: "Cinematic 16:9 medium shot: a delivery worker unloads cardboard boxes from the back of a small truck and stacks them on a hand cart on the sidewalk of a small retail store. Morning light, handheld documentary style. No readable text, no logos."
+- **IA-3**: "Cinematic 16:9 shot inside a small retail store's stockroom: a store clerk holds a paper document and counts stacked cardboard boxes, slightly rushed. Warm practical lighting, handheld documentary style, shallow depth of field. The paper is seen at an angle, never readable. No logos."
+- **IA-4**: "Cinematic 16:9 shot: a small white delivery truck drives away down a quiet street; in the foreground, a store clerk stands calm at the doorway of the shop next to neatly stacked cardboard boxes. Late-morning light, documentary style, gentle push-in. No readable text, no logos."
 
-**IA-4 — cierre:**
-"Cinematic 16:9 shot: a small white delivery truck drives away down a quiet street; in the foreground, a store clerk stands calm at the doorway of the shop next to neatly stacked cardboard boxes. Late-morning light, documentary style, gentle push-in. No readable text, no logos."
+Conseguí los 4 clips HOY, vengan de stock o de IA.
 
-Generá estos clips HOY. La generación tarda, gasta créditos y a veces hay que reintentar.
+---
+
+## Utilería: las cajas reales
+
+El sistema queda en el rubro sanitarios (remitos, etiquetas y catálogo, intactos).
+Las cajas van **siempre cerradas**: lo de adentro no se ve nunca, así que el contenido real no importa.
+Sirve cualquier caja con peso y forma creíbles.
+
+Mapa de cajas para el conteo guionado (5 cajas alcanzan):
+
+| Caja | Etiqueta que lleva | Escaneos |
+|---|---|---|
+| Grande 1 (con morrales) | `PEI-FLX-40-MA` (flexible) | 10 → faltante |
+| Grande 2 (con morrales) | `PEI-BIL-MC-CR` (Bilbao cromado) | 4 |
+| Grande 3 (con morrales) | `PEI-SIF-BOT-CR` (sifón) | 3 |
+| Chica 1 (con cepillos) | `PEI-CIN-TEF-12` (cinta teflón) | 6 |
+| Chica 2 | `ACC-DUCH-01` (alta en demo) | 2 |
+
+Las otras 3 etiquetas (Bilbao negro, rejilla, válvula) quedan de repuesto, sin caja.
+
+Reglas de la utilería:
+
+- Nunca abras una caja en cámara: el remito dice sanitarios y el contenido es otro.
+- Pegá la etiqueta en la cara más plana, horizontal, sin cinta sobre las barras.
+- El peso real (morrales, cepillos) ayuda: las cajas se mueven como bultos de verdad.
 
 ---
 

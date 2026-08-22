@@ -11,7 +11,7 @@ Entrega: **sábado 12:00**. Hoy se prepara todo; mañana solo se filma, se edita
 - [ ] Android con Chrome: corre la app y escanea con la cámara.
 - [ ] Segundo celu: filma las manos, las cajas y la foto al remito.
 - [ ] Impresora, tijera, plasticola o cinta de papel.
-- [ ] 8 cajas de cartón de tamaños parecidos.
+- [ ] 5 cajas de cartón cerradas: las 3 grandes con morrales + 2 chicas (una con cepillos). Ver "Utilería" en `guion-maestro.md`.
 - [ ] Lámpara o buena luz de frente.
 
 ### Imprimibles (carpeta `demo-video`)
@@ -29,7 +29,7 @@ Entrega: **sábado 12:00**. Hoy se prepara todo; mañana solo se filma, se edita
 ## Paso a paso — HOY (preparación)
 
 1. Imprimí los 3 archivos con las copias indicadas.
-2. Recortá las 8 etiquetas. Pegá una por caja: cara más grande y plana, horizontal, pegamento **solo en los bordes**. Nunca cinta transparente sobre las barras.
+2. Recortá las 8 etiquetas. Pegá 5 según el mapa de cajas de `guion-maestro.md`: cara más grande y plana, horizontal, pegamento **solo en los bordes**. Nunca cinta transparente sobre las barras. Las 3 etiquetas restantes quedan de repuesto.
 3. En el Android activá `chrome://flags/#unsafely-treat-insecure-origin-as-secure` con `http://IP-DE-LA-NOTEBOOK:8000`. Reiniciá Chrome.
 4. Probá cada etiqueta con la cámara del Android apenas la pegues.
 5. Ensayo completo cronometrado: foto al remito A → revisión → conteo → reclamo. Anotá cuánto tarda el procesamiento.
