@@ -11,13 +11,13 @@ Entrega: **sábado 12:00**. Hoy se prepara todo; mañana solo se filma, se edita
 - [ ] Android con Chrome: corre la app y escanea con la cámara.
 - [ ] Segundo celu: filma las manos, las cajas y la foto al remito.
 - [ ] Impresora, tijera, plasticola o cinta de papel.
-- [ ] 5 cajas de cartón cerradas: las 3 grandes con morrales + 2 chicas (una con cepillos). Ver "Utilería" en `guion-maestro.md`.
+- [ ] 5 cajas de cartón cerradas: las 3 iguales con stock + 1 mediana + 1 chica. Ver "Utilería" en `guion-maestro.md`.
 - [ ] Lámpara o buena luz de frente.
 
 ### Imprimibles (carpeta `demo-video`)
 - [ ] `remito-a.html` → **2 copias** (protagonista + repuesto).
 - [ ] `remito-b.html` → **1 copia** (remito "no visto", respaldo).
-- [ ] `etiquetas.html` → **2 copias** (8 etiquetas Code 128 + repuestos).
+- [ ] `etiquetas.html` → **3 copias** (las 3 cajas iguales llevan la misma etiqueta del flexible).
 - Imprimir al **100% de escala**, sin "ajustar a página".
 
 ### Software que tiene que estar listo (viene del otro chat)
@@ -29,7 +29,7 @@ Entrega: **sábado 12:00**. Hoy se prepara todo; mañana solo se filma, se edita
 ## Paso a paso — HOY (preparación)
 
 1. Imprimí los 3 archivos con las copias indicadas.
-2. Recortá las 8 etiquetas. Pegá 5 según el mapa de cajas de `guion-maestro.md`: cara más grande y plana, horizontal, pegamento **solo en los bordes**. Nunca cinta transparente sobre las barras. Las 3 etiquetas restantes quedan de repuesto.
+2. Recortá las etiquetas. Pegá según el mapa de cajas de `guion-maestro.md`: el flexible en las 3 cajas iguales (3 copias), el teflón en la mediana, `ACC-DUCH-01` en la chica. Cara más grande y plana, horizontal, pegamento **solo en los bordes**. Nunca cinta transparente sobre las barras. Bilbao cromado y sifón se escanean desde la hoja, fuera de cámara.
 3. En el Android activá `chrome://flags/#unsafely-treat-insecure-origin-as-secure` con `http://IP-DE-LA-NOTEBOOK:8000`. Reiniciá Chrome.
 4. Probá cada etiqueta con la cámara del Android apenas la pegues.
 5. Ensayo completo cronometrado: foto al remito A → revisión → conteo → reclamo. Anotá cuánto tarda el procesamiento.

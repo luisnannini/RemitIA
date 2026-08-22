@@ -101,23 +101,27 @@ El sistema queda en el rubro sanitarios (remitos, etiquetas y catálogo, intacto
 Las cajas van **siempre cerradas**: lo de adentro no se ve nunca, así que el contenido real no importa.
 Sirve cualquier caja con peso y forma creíbles.
 
-Mapa de cajas para el conteo guionado (5 cajas alcanzan):
+Utilería disponible: 3 cajas iguales (stock de muchas unidades negras, producto no identificable a simple vista) + 1 caja mediana + 1 caja chica.
 
-| Caja | Etiqueta que lleva | Escaneos |
-|---|---|---|
-| Grande 1 (con morrales) | `PEI-FLX-40-MA` (flexible) | 10 → faltante |
-| Grande 2 (con morrales) | `PEI-BIL-MC-CR` (Bilbao cromado) | 4 |
-| Grande 3 (con morrales) | `PEI-SIF-BOT-CR` (sifón) | 3 |
-| Chica 1 (con cepillos) | `PEI-CIN-TEF-12` (cinta teflón) | 6 |
-| Chica 2 | `ACC-DUCH-01` (alta en demo) | 2 |
+Regla de recepción real: **cajas iguales = mismo producto**. Por eso las 3 iguales llevan la misma etiqueta y son un solo renglón del remito: el flexible, el renglón del faltante. Escanear caja por caja hace el faltante visible y físico.
 
-Las otras 3 etiquetas (Bilbao negro, rejilla, válvula) quedan de repuesto, sin caja.
+Mapa para el conteo guionado:
+
+| Físico | Etiqueta | Renglón | Escaneos | ¿En cámara? |
+|---|---|---|---|---|
+| 3 cajas iguales | `PEI-FLX-40-MA` (una por caja, 3 copias) | Flexible, esperado 12 | 4 + 3 + 3 = 10 → faltan 2 | Sí: la estrella de T7 y T8 |
+| Caja mediana | `PEI-CIN-TEF-12` (cinta teflón) | Teflón, esperado 6 | 6 | Sí: 1 o 2 escaneos vistosos |
+| Caja chica | `ACC-DUCH-01` (alta en demo) | Ducha, esperada 2 | 2 | Sí |
+| Hoja impresa, sin caja | `PEI-BIL-MC-CR` (Bilbao cromado) | Bilbao, esperado 4 | 4 | No: fuera de cámara |
+| Hoja impresa, sin caja | `PEI-SIF-BOT-CR` (sifón) | Sifón, esperado 3 | 3 | No: fuera de cámara |
+
+Los escaneos "fuera de cámara" son reales contra el backend: el código funciona igual desde la hoja plana. Solo queda fuera del plano. Las otras 3 etiquetas (Bilbao negro, rejilla, válvula) quedan de repuesto.
 
 Reglas de la utilería:
 
-- Nunca abras una caja en cámara: el remito dice sanitarios y el contenido es otro.
-- Pegá la etiqueta en la cara más plana, horizontal, sin cinta sobre las barras.
-- El peso real (morrales, cepillos) ayuda: las cajas se mueven como bultos de verdad.
+- Mejor cajas cerradas. Si mostrás una abierta, que sea una de las 3 iguales y sin primer plano del contenido: las unidades negras no se identifican, pero no las expongas de cerca.
+- Pegá cada etiqueta en la cara más plana, horizontal, sin cinta sobre las barras.
+- El peso real del stock ayuda: las cajas se mueven como bultos de verdad.
 
 ---
 
