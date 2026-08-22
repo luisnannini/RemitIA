@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="RemitIA">
+	<rect width="64" height="64" rx="14" fill="#0b1120" />
+	<path d="M18 14h20l10 10v26a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4Z" fill="#1e293b" />
+	<path d="M38 14l10 10H40a2 2 0 0 1-2-2v-8Z" fill="#334155" />
+	<path d="M21 30h14M21 37h18M21 44h10" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" />
+	<circle cx="44" cy="44" r="10" fill="#10b981" />
+	<path d="M39.5 44l3.2 3.4 6.1-6.6" stroke="#052e1b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>

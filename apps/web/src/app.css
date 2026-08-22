@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+
+/**
+ * RemitIA — tema de depósito: alto contraste, tipografía grande, pensado para
+ * un celular sostenido con una mano mientras el camión espera (PRD 1.2).
+ *
+ * Nota Tailwind v4: `@apply` solo admite utilidades del framework, no clases
+ * propias; por eso las variantes de botón repiten la base en vez de componerla.
+ */
+
+@theme {
+	--color-ink-950: #060a14;
+	--color-ink-900: #0b1120;
+	--color-ink-800: #111a2e;
+	--color-ink-700: #1b2740;
+
+	--color-ok-400: #34d399;
+	--color-warn-400: #fbbf24;
+	--color-bad-400: #fb7185;
+}
+
+@layer base {
+	html {
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		min-height: 100dvh;
+		background:
+			radial-gradient(120% 80% at 50% -10%, #14213c 0%, transparent 60%),
+			var(--color-ink-950);
+		color: #e2e8f0;
+		font-family:
+			ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+			sans-serif;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	:focus-visible {
+		outline: 2px solid #38bdf8;
+		outline-offset: 2px;
+	}
+}
+
+@layer components {
+	/* Números grandes de la recepción guiada: tabulares para que no bailen. */
+	.tnum {
+		font-variant-numeric: tabular-nums;
+	}
+
+	.card {
+		@apply rounded-2xl border border-white/10 bg-white/[0.03] p-4 shadow-lg shadow-black/20;
+	}
+
+	.btn,
+	.btn-primary,
+	.btn-secondary,
+	.btn-ghost {
+		@apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:active:scale-100;
+	}
+
+	.btn-primary {
+		@apply bg-sky-500 text-slate-950 hover:bg-sky-400;
+	}
+
+	.btn-secondary {
+		@apply border border-white/15 bg-white/5 text-slate-100 hover:bg-white/10;
+	}
+
+	.btn-ghost {
+		@apply text-slate-300 hover:bg-white/5;
+	}
+
+	.field {
+		@apply w-full rounded-xl border border-white/15 bg-slate-950/60 px-3 py-3 text-base text-slate-100 placeholder:text-slate-500 focus:border-sky-400 focus:outline-none;
+	}
+
+	.chip {
+		@apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide uppercase;
+	}
+}
