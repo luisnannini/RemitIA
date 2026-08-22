@@ -51,6 +51,8 @@
 
 	let video = $state<HTMLVideoElement | null>(null);
 	let closeButton = $state<HTMLButtonElement | null>(null);
+	let problemRetryButton = $state<HTMLButtonElement | null>(null);
+	let problemCloseButton = $state<HTMLButtonElement | null>(null);
 
 	let problem = $state<CameraProblem | null>(null);
 	let live = $state(false);
@@ -211,9 +213,15 @@
 		return stop;
 	});
 
-	/** El foco entra al overlay, en la salida (a11y: diálogo modal). */
+	/**
+	 * Foco del diálogo (a11y). Enfocar solo al montar no alcanza: cuando aparece
+	 * `problem`, el header pasa a `inert` con el foco adentro y el navegador lo
+	 * tira a <body>; el panel de error quedaría invisible para teclado y lector
+	 * de pantalla. Cada cambio de `problem` reubica el foco en el lado activo.
+	 */
 	$effect(() => {
-		closeButton?.focus();
+		if (problem) (problemRetryButton ?? problemCloseButton)?.focus();
+		else closeButton?.focus();
 	});
 
 	function onKeydown(event: KeyboardEvent) {
@@ -323,9 +331,21 @@
 				<p class="mt-1.5 text-sm text-slate-300">{problem.hint}</p>
 				<div class="mt-4 grid gap-2">
 					{#if problem.retry}
-						<button type="button" class="btn-primary w-full" onclick={retry}>Reintentar</button>
+						<button
+							bind:this={problemRetryButton}
+							type="button"
+							class="btn-primary w-full"
+							onclick={retry}
+						>
+							Reintentar
+						</button>
 					{/if}
-					<button type="button" class="btn-secondary w-full" onclick={onclose}>
+					<button
+						bind:this={problemCloseButton}
+						type="button"
+						class="btn-secondary w-full"
+						onclick={onclose}
+					>
 						Cerrar y escribir el código
 					</button>
 				</div>

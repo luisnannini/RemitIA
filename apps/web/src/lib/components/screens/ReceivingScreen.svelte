@@ -31,6 +31,7 @@
 	let confirmOpen = $state(false);
 	let cameraOpen = $state(false);
 	let input = $state<HTMLInputElement | null>(null);
+	let confirmCancel = $state<HTMLButtonElement | null>(null);
 
 	/**
 	 * Feature-detect de la Barcode Detection API. Sin soporte no hay botón NI
@@ -58,6 +59,14 @@
 	$effect(() => {
 		if (scanning || confirmOpen || cameraOpen) return;
 		input?.focus();
+	});
+
+	// Al abrir el modal, el fondo pasa a `inert` con el foco todavía en
+	// "Terminé de contar" y el navegador lo tira a <body>. Se enfoca "Seguir
+	// contando": ante una acción que congela el conteo, el foco arranca en la
+	// salida segura, no en la confirmación.
+	$effect(() => {
+		confirmCancel?.focus();
 	});
 
 	function submit(event: SubmitEvent) {
@@ -221,7 +230,12 @@
 				>
 					Sí, finalizar
 				</button>
-				<button type="button" class="btn-ghost w-full" onclick={() => (confirmOpen = false)}>
+				<button
+					bind:this={confirmCancel}
+					type="button"
+					class="btn-ghost w-full"
+					onclick={() => (confirmOpen = false)}
+				>
 					Seguir contando
 				</button>
 			</div>
