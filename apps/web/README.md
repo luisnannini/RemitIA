@@ -75,6 +75,7 @@ el mismo lugar: la UI ofrece sacar otra foto y el Home queda listo para capturar
 ```
 src/
 ├─ app.css                    # Tailwind v4 + tema de depósito
+├─ barcode-detector.d.ts      # tipos de la Barcode Detection API (no están en lib.dom)
 ├─ lib/
 │  ├─ api/
 │  │  ├─ types.ts             # contrato público (PRD 7 y 8) tipado
@@ -88,10 +89,12 @@ src/
 │  │  ├─ labels.ts            # textos y clases por estado canónico
 │  │  ├─ new-product.ts       # validación de forma del alta de SKU (flujo c)
 │  │  ├─ actions.ts           # error del contrato atribuido a una línea
+│  │  ├─ camera.ts            # fallas locales de la cámara (NO son del PRD 8.11)
 │  │  └─ document-file.ts     # validación local JPG/PNG ≤ 12 MB (PRD 8.3)
 │  └─ components/
 │     ├─ HealthBanner, LineCard, MatchBadge, MatchStatusIcon, ErrorPanel, LocalSeal, Spinner
 │     ├─ DocumentPicker.svelte # cámara/archivo + preview con objectURL
+│     ├─ CameraScanner.svelte  # overlay de escaneo Code 128 (BarcodeDetector nativo)
 │     └─ screens/             # Procesando, Fallo, Revisión, Recepción guiada, Resumen
 └─ routes/
    ├─ +page.svelte            # Home (`?recapturar=1` = listo para otra foto)
@@ -165,10 +168,72 @@ que más tiempo ocupa en el video (guion 1:00–1:40).
 - Después de un alta se vuelve a pedir `GET /catalog` (silenciosamente): el
   catálogo cambió y el buscador y el nombre del producto asignado lo usan.
 
+## Escaneo por cámara (FE-05)
+
+No existe el lector USB que asumía el PRD 8.7 original. La línea corregida dice:
+**"Entrada física: cámara del celular (Android + Chrome, Code 128) sobre la
+página; teclado manual como fallback."** El contrato de `POST /scans` no cambió:
+todo esto es UI.
+
+- `CameraScanner.svelte` es un overlay a pantalla completa con la cámara trasera
+  (`getUserMedia({ video: { facingMode: 'environment' } })`) y decodifica con la
+  API **nativa** `BarcodeDetector` (`formats: ['code_128']`). **Sin librerías
+  externas**: P0 es offline y no se agrega peso al bundle.
+- El overlay **no conoce la API**: recibe `unitsCounted`, `scanning`, `onscan` y
+  `onclose`, y emite códigos por el mismo `onscan` que el submit del input de
+  teclado. El `client_event_id` y el `quantity: 1` los sigue poniendo
+  `routes/recepcion/[id]/+page.svelte`.
+- **Contador**: el número grande es `view.summary.units_counted`, el del
+  servidor. El "en esta sesión" es un dato de UI y se dice como tal; acá no se
+  suma nada (PRD 10.3).
+- **Cooldown de 1,5 s por código** (`Map` código → instante). Sostener la cámara
+  sobre una etiqueta no dispara diez `POST /scans`; re-apuntar deliberadamente
+  después de la ventana sí suma otra unidad. Además, mientras `scanning` es
+  `true` no se emite nada: nunca hay dos escaneos en vuelo.
+- **Feature-detect**: el botón "Escanear con la cámara" aparece solo si
+  `'BarcodeDetector' in window` (Chrome; no está en Firefox ni Safari). Sin
+  soporte no hay botón **ni error**: el input de teclado queda igual que antes.
+- **Foco**: con el overlay abierto, el `$effect` de foco de `ReceivingScreen` no
+  toca el input (mismo trato que el modal de confirmación). Al cerrar, el foco
+  vuelve al input.
+- **Limpieza**: el teardown del `$effect` hace `track.stop()` **siempre**,
+  incluso si el componente se desmonta con la cámara abierta o si el permiso
+  todavía estaba en vuelo. La luz de la cámara no queda prendida.
+- **Errores**: permiso denegado, sin cámara, cámara ocupada, navegador sin
+  soporte y contexto no seguro se muestran **dentro** del overlay, con texto
+  humano y botones (reintentar / cerrar y escribir el código). Son fallas
+  locales del navegador: **no** usan el envelope del PRD 8.11 ni el `ErrorPanel`
+  global, y nunca muestran un stack trace.
+- **a11y**: `role="dialog"`, `aria-modal`, foco inicial en "Cerrar", `Escape`
+  cierra. El feedback es redundante: vibración (`navigator.vibrate`), destello
+  verde y el código leído en texto.
+
+### Probarlo en el celular (requiere contexto seguro)
+
+`getUserMedia` solo existe en un **contexto seguro**: HTTPS o `localhost`. Abrir
+`http://192.168.x.x:5173` desde el celular deja `navigator.mediaDevices` en
+`undefined` y el overlay lo dice con todas las letras.
+
+```bash
+npm run dev -- --host        # mock, escenario A, sin FastAPI
+npm run dev:api -- --host    # contra FastAPI real (Vite proxea /api desde la notebook)
+```
+
+En el celular, Chrome → `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
+→ agregar el origen exacto que imprime Vite (`http://192.168.x.x:5173`) →
+**Enabled** → relanzar Chrome. Recién ahí el botón de cámara funciona sobre HTTP.
+
+El celular habla **solo** con Vite: el proxy a `http://localhost:8000` lo
+resuelve el proceso de Vite en la notebook, así que no hace falta exponer
+FastAPI ni tocar CORS (ADR-003). En escritorio alcanza con una webcam en
+`http://localhost:5173`, que ya es contexto seguro.
+
 ## Reglas que respeta esta app
 
 - No calcula diferencias ni totales: muestra `summary` y `discrepancy` tal como llegan.
 - No decide transiciones: elige la pantalla según el `status` que publica la API.
 - No acepta un SKU fuera de los candidatos en el flujo (b).
+- El overlay de cámara solo emite el código que leyó: no suma, no transiciona y
+  no inventa SKUs. Quien resuelve barcode → SKU es el backend (PRD 8.7).
 - Muestra `message` del envelope de error y una acción humana; nunca stack traces.
 - Dice "borrador listo", nunca "enviado".
