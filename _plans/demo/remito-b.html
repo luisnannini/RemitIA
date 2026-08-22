@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Remito B — Distribuidora Norte (no visto / respaldo)</title>
+<style>
+	@page { size: A4; margin: 14mm; }
+	* { box-sizing: border-box; margin: 0; }
+	body { font-family: Arial, Helvetica, sans-serif; color: #111; background: #fff; font-size: 13px; }
+	.doc { max-width: 182mm; margin: 0 auto; }
+	.top { display: flex; justify-content: space-between; align-items: flex-start; border: 1.5px solid #111; padding: 5mm; }
+	.brand h1 { font-size: 21px; letter-spacing: 0.5px; }
+	.brand p { font-size: 11px; color: #333; margin-top: 1mm; }
+	.rbox { text-align: center; border: 1.5px solid #111; padding: 2mm 4mm; margin: 0 6mm; }
+	.rbox .r { font-size: 26px; font-weight: bold; line-height: 1; }
+	.rbox p { font-size: 9px; margin-top: 1mm; }
+	.meta { text-align: right; font-size: 12px; }
+	.meta .num { font-size: 16px; font-weight: bold; font-family: 'Courier New', monospace; }
+	.client { border: 1.5px solid #111; border-top: 0; padding: 3.5mm 5mm; display: grid; grid-template-columns: 1fr 1fr; gap: 1mm 8mm; font-size: 12px; }
+	table { width: 100%; border-collapse: collapse; margin-top: 5mm; }
+	th, td { border: 1px solid #111; padding: 3mm 3.5mm; text-align: left; }
+	th { background: #eee; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+	td.qty, th.qty { text-align: center; width: 22mm; font-size: 15px; }
+	td.code { font-family: 'Courier New', monospace; width: 26mm; }
+	td.desc { font-size: 14px; }
+	.total { margin-top: 3mm; text-align: right; font-size: 13px; font-weight: bold; }
+	.foot { margin-top: 12mm; display: flex; justify-content: space-between; gap: 10mm; }
+	.sign { flex: 1; border-top: 1px solid #111; padding-top: 2mm; font-size: 11px; text-align: center; }
+	.legal { margin-top: 8mm; font-size: 9.5px; color: #444; text-align: center; }
+</style>
+</head>
+<body>
+<div class="doc">
+	<div class="top">
+		<div class="brand">
+			<h1>DISTRIBUIDORA NORTE S.A.</h1>
+			<p>Av. Circunvalación 5230 · Rosario, Santa Fe</p>
+			<p>CUIT 30-71542368-9 · IVA Responsable Inscripto</p>
+		</div>
+		<div class="rbox"><div class="r">R</div><p>Cód. 91</p></div>
+		<div class="meta">
+			<p style="font-size:15px;font-weight:bold;">REMITO</p>
+			<p class="num">N° 0001-00004518</p>
+			<p>Fecha: 23/08/2026</p>
+		</div>
+	</div>
+	<div class="client">
+		<p><b>Señores:</b> Sanitarios Accesaniga</p>
+		<p><b>CUIT:</b> 30-70998877-2</p>
+		<p><b>Domicilio:</b> Av. Pellegrini 1834, Rosario</p>
+		<p><b>Cond. de venta:</b> Cuenta corriente</p>
+	</div>
+	<table>
+		<thead>
+			<tr><th>Código</th><th>Descripción</th><th class="qty">Cant.</th></tr>
+		</thead>
+		<tbody>
+			<tr><td class="code">RJ-1010</td><td class="desc">Rejilla pileta 10x10 acero</td><td class="qty">8</td></tr>
+			<tr><td class="code">MB-202</td><td class="desc">Monocomando Bilbao negro</td><td class="qty">2</td></tr>
+			<tr><td class="code">VE-034</td><td class="desc">Válvula esférica bronce 3/4</td><td class="qty">5</td></tr>
+			<tr><td class="code">CT-1210</td><td class="desc">Cinta teflón 12mm x 10m</td><td class="qty">10</td></tr>
+		</tbody>
+	</table>
+	<p class="total">Total de bultos: 25</p>
+	<div class="foot">
+		<div class="sign">Recibí conforme (firma)</div>
+		<div class="sign">Aclaración</div>
+		<div class="sign">DNI</div>
+	</div>
+	<p class="legal">Documento no válido como factura · Original blanco / Duplicado color</p>
+</div>
+</body>
+</html>
