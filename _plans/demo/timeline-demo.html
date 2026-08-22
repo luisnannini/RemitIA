@@ -58,6 +58,36 @@
 	tr.hoy td.estado { color: #ffc95e; font-weight: 600; }
 	tr.man td.estado { color: #93d4ff; }
 	td .tag { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; }
+
+	h2 { font-size: 20px; margin: 44px 0 6px; }
+	.sub { font-size: 13px; color: #45607f; margin-bottom: 18px; }
+	.card {
+		border: 1px solid #14283f; border-left-width: 5px; border-radius: 8px;
+		background: #0a1424; padding: 14px 18px; margin-bottom: 12px;
+		scroll-margin-top: 20px;
+	}
+	.card.stock { border-left-color: #c98a16; }
+	.card.placa { border-left-color: #6d5bc7; }
+	.card.real  { border-left-color: #2d84cf; }
+	.card:target { border-color: #38bdf8; box-shadow: 0 0 0 2px #38bdf880; }
+	.card header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+	.card .num { font-size: 20px; font-weight: 700; color: #dbe7f5; }
+	.card .time { font-family: Consolas, monospace; font-size: 13px; color: #9fb3cc; }
+	.card .src { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; }
+	.card.stock .src { color: #ffc95e; } .card.placa .src { color: #b9a8f5; } .card.real .src { color: #93d4ff; }
+	.card .vo-id { margin-left: auto; font-family: Consolas, monospace; font-size: 12px; color: #45607f; }
+	.card .scene { font-size: 13px; color: #9fb3cc; margin-bottom: 10px; }
+	.card .vo {
+		font-size: 17px; line-height: 1.55; color: #f3f7fc;
+		border-left: 2px solid #1e3a5c; padding-left: 14px; margin-bottom: 10px;
+	}
+	.card .vo.mute { color: #45607f; font-style: italic; border-left-color: #14283f; }
+	.card .label {
+		display: inline-block; font-family: Consolas, monospace; font-size: 12px;
+		letter-spacing: 0.08em; color: #38bdf8; border: 1px solid #1e3a5c;
+		border-radius: 5px; padding: 4px 10px;
+	}
+	a.clip { text-decoration: none; }
 </style>
 </head>
 <body>
@@ -79,22 +109,22 @@
 	</div>
 
 	<div class="bar">
-		<div class="clip stock" style="width:4.44%"  title="0:00–0:08 · Camión llega · VO-01"><span class="n">01</span><span class="d">8s</span></div>
-		<div class="clip stock" style="width:4.44%"  title="0:08–0:16 · Descarga de cajas · VO-02"><span class="n">02</span><span class="d">8s</span></div>
-		<div class="clip stock" style="width:5.56%"  title="0:16–0:26 · Conteo a mano · VO-03"><span class="n">03</span><span class="d">10s</span></div>
-		<div class="clip placa" style="width:3.33%"  title="0:26–0:32 · Placa título"><span class="n">04</span><span class="d">6s</span></div>
-		<div class="clip real"  style="width:5.56%"  title="0:32–0:42 · T1 sin internet · VO-04"><span class="n">05</span><span class="d">10s</span></div>
-		<div class="clip real"  style="width:7.78%"  title="0:42–0:56 · T2 foto al remito · VO-05"><span class="n">06</span><span class="d">14s</span></div>
-		<div class="clip real"  style="width:5.56%"  title="0:56–1:06 · T3 procesando · VO-06"><span class="n">07</span><span class="d">10s</span></div>
-		<div class="clip real"  style="width:5.56%"  title="1:06–1:16 · T4 foto mala · VO-07"><span class="n">08</span><span class="d">10s</span></div>
-		<div class="clip real"  style="width:10%"    title="1:16–1:34 · T5 revisión ambigua · VO-08"><span class="n">09</span><span class="d">18s</span></div>
-		<div class="clip real"  style="width:8.89%"  title="1:34–1:50 · T6 alta de SKU · VO-09"><span class="n">10</span><span class="d">16s</span></div>
-		<div class="clip real"  style="width:12.22%" title="1:50–2:12 · T7 escaneo de cajas · VO-10"><span class="n">11</span><span class="d">22s</span></div>
-		<div class="clip real"  style="width:6.67%"  title="2:12–2:24 · T8 confirmar faltante · VO-11"><span class="n">12</span><span class="d">12s</span></div>
-		<div class="clip real"  style="width:11.11%" title="2:24–2:44 · T9 reclamo · VO-12"><span class="n">13</span><span class="d">20s</span></div>
-		<div class="clip real"  style="width:4.44%"  title="2:44–2:52 · T10 resumen · VO-13"><span class="n">14</span><span class="d">8s</span></div>
-		<div class="clip stock" style="width:2.78%"  title="2:52–2:57 · Camión se va · VO-14"><span class="n">15</span><span class="d">5s</span></div>
-		<div class="clip placa" style="width:1.67%"  title="2:57–3:00 · Placa final"><span class="n">16</span><span class="d">3s</span></div>
+		<a class="clip stock" href="#c01" style="width:4.44%"  title="0:00–0:08 · Camión llega · VO-01"><span class="n">01</span><span class="d">8s</span></a>
+		<a class="clip stock" href="#c02" style="width:4.44%"  title="0:08–0:16 · Descarga de cajas · VO-02"><span class="n">02</span><span class="d">8s</span></a>
+		<a class="clip stock" href="#c03" style="width:5.56%"  title="0:16–0:26 · Conteo a mano · VO-03"><span class="n">03</span><span class="d">10s</span></a>
+		<a class="clip placa" href="#c04" style="width:3.33%"  title="0:26–0:32 · Placa título"><span class="n">04</span><span class="d">6s</span></a>
+		<a class="clip real"  href="#c05" style="width:5.56%"  title="0:32–0:42 · T1 sin internet · VO-04"><span class="n">05</span><span class="d">10s</span></a>
+		<a class="clip real"  href="#c06" style="width:7.78%"  title="0:42–0:56 · T2 foto al remito · VO-05"><span class="n">06</span><span class="d">14s</span></a>
+		<a class="clip real"  href="#c07" style="width:5.56%"  title="0:56–1:06 · T3 procesando · VO-06"><span class="n">07</span><span class="d">10s</span></a>
+		<a class="clip real"  href="#c08" style="width:5.56%"  title="1:06–1:16 · T4 foto mala · VO-07"><span class="n">08</span><span class="d">10s</span></a>
+		<a class="clip real"  href="#c09" style="width:10%"    title="1:16–1:34 · T5 revisión ambigua · VO-08"><span class="n">09</span><span class="d">18s</span></a>
+		<a class="clip real"  href="#c10" style="width:8.89%"  title="1:34–1:50 · T6 alta de SKU · VO-09"><span class="n">10</span><span class="d">16s</span></a>
+		<a class="clip real"  href="#c11" style="width:12.22%" title="1:50–2:12 · T7 escaneo de cajas · VO-10"><span class="n">11</span><span class="d">22s</span></a>
+		<a class="clip real"  href="#c12" style="width:6.67%"  title="2:12–2:24 · T8 confirmar faltante · VO-11"><span class="n">12</span><span class="d">12s</span></a>
+		<a class="clip real"  href="#c13" style="width:11.11%" title="2:24–2:44 · T9 reclamo · VO-12"><span class="n">13</span><span class="d">20s</span></a>
+		<a class="clip real"  href="#c14" style="width:4.44%"  title="2:44–2:52 · T10 resumen · VO-13"><span class="n">14</span><span class="d">8s</span></a>
+		<a class="clip stock" href="#c15" style="width:2.78%"  title="2:52–2:57 · Camión se va · VO-14"><span class="n">15</span><span class="d">5s</span></a>
+		<a class="clip placa" href="#c16" style="width:1.67%"  title="2:57–3:00 · Placa final"><span class="n">16</span><span class="d">3s</span></a>
 	</div>
 
 	<div class="ruler">
@@ -128,5 +158,117 @@
 			<tr class="hoy"><td>16</td><td class="t">2:57–3:00</td><td class="f">16-placa-final.mp4</td><td><span class="tag" style="background:#4c3f8f"></span>Equipo · track · repo</td><td>Música cierra</td><td class="estado">HOY</td></tr>
 		</tbody>
 	</table>
+
+	<h2>Script por bloque</h2>
+	<p class="sub">Clic en un bloque de la barra salta a su tarjeta. El texto entre comillas es la voz en off, tal cual se graba.</p>
+
+	<article class="card stock" id="c01">
+		<header><span class="num">01</span><span class="time">0:00–0:08</span><span class="src">Stock</span><span class="vo-id">vo-01</span></header>
+		<p class="scene">Camión de reparto llega a un local. Música sube.</p>
+		<p class="vo">"Every morning, trucks like this one deliver goods to thousands of small stores."</p>
+	</article>
+
+	<article class="card stock" id="c02">
+		<header><span class="num">02</span><span class="time">0:08–0:16</span><span class="src">Stock</span><span class="vo-id">vo-02</span></header>
+		<p class="scene">Descarga de cajas al carrito, vereda del local.</p>
+		<p class="vo">"What arrives is a paper delivery note — and a pile of boxes. Counting is manual, and mistakes surface days later, when the truck is long gone and the claim is lost."</p>
+	</article>
+
+	<article class="card stock" id="c03">
+		<header><span class="num">03</span><span class="time">0:16–0:26</span><span class="src">Stock</span><span class="vo-id">vo-03</span></header>
+		<p class="scene">Empleado apurado cuenta cajas con un remito en la mano.</p>
+		<p class="vo">"Cloud AI could help. But these documents are the business — they shouldn't leave the building."</p>
+		<p class="label">THE DOCUMENTS ARE THE BUSINESS</p>
+	</article>
+
+	<article class="card placa" id="c04">
+		<header><span class="num">04</span><span class="time">0:26–0:32</span><span class="src">Placa título</span><span class="vo-id">—</span></header>
+		<p class="scene">Logo RemitIA + tagline (grabar <code>placa-titulo.html</code>).</p>
+		<p class="vo mute">Sin voz: golpe musical.</p>
+		<p class="label">RemitIA · LOCAL AI FOR GOODS RECEPTION</p>
+	</article>
+
+	<article class="card real" id="c05">
+		<header><span class="num">05</span><span class="time">0:32–0:42</span><span class="src">Real · T1</span><span class="vo-id">vo-04</span></header>
+		<p class="scene">Google sin internet + app con banner READY.</p>
+		<p class="vo">"This is RemitIA. OCR, a language model, product matching — everything runs on this laptop with QVAC by Tether. No internet, and it still works."</p>
+		<p class="label">100% LOCAL · NO CLOUD</p>
+	</article>
+
+	<article class="card real" id="c06">
+		<header><span class="num">06</span><span class="time">0:42–0:56</span><span class="src">Real · T2</span><span class="vo-id">vo-05</span></header>
+		<p class="scene">Manos + remito + foto desde la app.</p>
+		<p class="vo">"The clerk photographs the delivery note. The document never leaves the building."</p>
+		<p class="label">THE DOCUMENT NEVER LEAVES THE WAREHOUSE</p>
+	</article>
+
+	<article class="card real" id="c07">
+		<header><span class="num">07</span><span class="time">0:56–1:06</span><span class="src">Real · T3</span><span class="vo-id">vo-06</span></header>
+		<p class="scene">Pantalla Procesando; salto del contador de segundos (edición honesta).</p>
+		<p class="vo">"QVAC reads it locally: OCR, line extraction, then matching against the store's own catalog."</p>
+		<p class="label">LOCAL OCR + LOCAL LLM</p>
+	</article>
+
+	<article class="card real" id="c08">
+		<header><span class="num">08</span><span class="time">1:06–1:16</span><span class="src">Real · T4</span><span class="vo-id">vo-07</span></header>
+		<p class="scene">Foto movida → pantalla de rechazo.</p>
+		<p class="vo">"And if the photo is bad? RemitIA refuses to guess. It asks for a new shot — it never invents data."</p>
+		<p class="label">BAD PHOTO? IT REFUSES TO GUESS</p>
+	</article>
+
+	<article class="card real" id="c09">
+		<header><span class="num">09</span><span class="time">1:16–1:34</span><span class="src">Real · T5</span><span class="vo-id">vo-08</span></header>
+		<p class="scene">Revisión; pregunta del Bilbao; toque en "cromado".</p>
+		<p class="vo">"Most lines matched on their own. And when the model is unsure, it says so: one question, two candidates, one tap."</p>
+		<p class="label">HONEST AI ASKS INSTEAD OF GUESSING</p>
+	</article>
+
+	<article class="card real" id="c10">
+		<header><span class="num">10</span><span class="time">1:34–1:50</span><span class="src">Real · T6</span><span class="vo-id">vo-09</span></header>
+		<p class="scene">Alta de la ducha con SKU exacto <code>ACC-DUCH-01</code>.</p>
+		<p class="vo">"This product isn't in the catalog at all. The model never invents a SKU — the person creates it, in seconds."</p>
+		<p class="label">THE MODEL NEVER INVENTS A SKU</p>
+	</article>
+
+	<article class="card real" id="c11">
+		<header><span class="num">11</span><span class="time">1:50–2:12</span><span class="src">Real · T7</span><span class="vo-id">vo-10</span></header>
+		<p class="scene">La cámara escanea las 3 cajas iguales; el contador sube.</p>
+		<p class="vo">"Now the count. The phone camera scans each box, and the model does no math at all. Deterministic code adds the numbers."</p>
+		<p class="label">LLMs DON'T COUNT. CODE DOES.</p>
+	</article>
+
+	<article class="card real" id="c12">
+		<header><span class="num">12</span><span class="time">2:12–2:24</span><span class="src">Real · T8</span><span class="vo-id">vo-11</span></header>
+		<p class="scene">Modal "¿Ya contaste todo?" → confirmar.</p>
+		<p class="vo">"Twelve flexible hoses expected. Ten scanned. The clerk confirms — the decision stays human."</p>
+		<p class="label">EXPECTED 12 · COUNTED 10</p>
+	</article>
+
+	<article class="card real" id="c13">
+		<header><span class="num">13</span><span class="time">2:24–2:44</span><span class="src">Real · T9</span><span class="vo-id">vo-12</span></header>
+		<p class="scene">Reclamo con tabla de hechos, scroll lento.</p>
+		<p class="vo">"Before the truck leaves, the claim is already written — grounded on the document, the scans, and the differences. Every number comes from code, not from the model."</p>
+		<p class="label">GROUNDED CLAIM · READY BEFORE THE TRUCK LEAVES</p>
+	</article>
+
+	<article class="card real" id="c14">
+		<header><span class="num">14</span><span class="time">2:44–2:52</span><span class="src">Real · T10</span><span class="vo-id">vo-13</span></header>
+		<p class="scene">Resumen + sello QVAC.</p>
+		<p class="vo">"What the AI did, what code did, what the person decided — RemitIA keeps that line visible."</p>
+		<p class="label">PROCESSED LOCALLY WITH QVAC</p>
+	</article>
+
+	<article class="card stock" id="c15">
+		<header><span class="num">15</span><span class="time">2:52–2:57</span><span class="src">Stock</span><span class="vo-id">vo-14</span></header>
+		<p class="scene">El camión se va; el local queda en calma.</p>
+		<p class="vo">"Local, honest, and ready for the next truck."</p>
+	</article>
+
+	<article class="card placa" id="c16">
+		<header><span class="num">16</span><span class="time">2:57–3:00</span><span class="src">Placa final</span><span class="vo-id">—</span></header>
+		<p class="scene">Equipo · track · repo (grabar <code>placa-final.html</code>).</p>
+		<p class="vo mute">Sin voz: la música cierra.</p>
+		<p class="label">REAL PIPELINE · NO CLOUD · NO FAKES</p>
+	</article>
 </body>
 </html>
